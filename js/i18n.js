@@ -72,8 +72,8 @@ export const i18n = {
     calendar: {
       title: "Lưu vào lịch của bạn",
       subtitle: "Thêm sự kiện để không bỏ lỡ ngày kỷ niệm ý nghĩa này nhé",
-      googleCal: "Google Calendar",
-      icsDownload: "Tải file lịch (.ics / Apple / Outlook)",
+      appleCal: "Thêm vào iPhone (Apple Calendar)",
+      googleCal: "Thêm vào Android (Google Calendar)",
       eventTitle: "Lễ Tốt Nghiệp - Phan Thanh Bình",
       eventDescription: "Lễ tốt nghiệp Kỹ sư An toàn thông tin của Phan Thanh Bình.\\nĐịa điểm: Hội trường Rùa, Đại học Cần Thơ.\\nChụp ảnh cùng bạn bè: 16:00.\\nHotline: 0327397756."
     },
@@ -86,8 +86,8 @@ export const i18n = {
       statusLabel: "Bạn sẽ đến chung vui chứ?",
       statusYes: "Chắc chắn mình sẽ đến 🎉",
       statusNo: "Rất tiếc mình bận mất rồi 💌",
-      messageLabel: "Lời nhắn gửi đến Bình (không bắt buộc)",
-      messagePlaceholder: "Viết lời nhắn hoặc câu dặn dò...",
+      messageLabel: "Lời nhắn hoặc lời chúc gửi đến Bình (không bắt buộc)",
+      messagePlaceholder: "Viết lời nhắn, câu dặn dò hoặc lời chúc đến Bình...",
       submitBtn: "Gửi xác nhận",
       submitting: "Đang gửi...",
       success: "Cảm ơn bạn thật nhiều! Phản hồi của bạn đã được ghi nhận thành công.",
@@ -212,8 +212,8 @@ export const i18n = {
     calendar: {
       title: "Add to Calendar",
       subtitle: "Save this milestone event so you don't miss out",
-      googleCal: "Google Calendar",
-      icsDownload: "Download .ics (Apple / Outlook)",
+      appleCal: "Add to iPhone (Apple Calendar)",
+      googleCal: "Add to Android (Google Calendar)",
       eventTitle: "Graduation Ceremony - Phan Thanh Binh",
       eventDescription: "Graduation Ceremony of Information Security Engineer Phan Thanh Binh.\\nVenue: Turtle Hall, Can Tho University.\\nPhoto session with family & friends: 16:00.\\nHotline: 0327397756."
     },
@@ -226,8 +226,8 @@ export const i18n = {
       statusLabel: "Will you attend?",
       statusYes: "I will definitely be there 🎉",
       statusNo: "Regretfully, I cannot make it 💌",
-      messageLabel: "Message to Binh (optional)",
-      messagePlaceholder: "Leave a note or advice...",
+      messageLabel: "Message or wishes for Binh (optional)",
+      messagePlaceholder: "Leave a note, wishes or advice...",
       submitBtn: "Submit RSVP",
       submitting: "Submitting...",
       success: "Thank you so much! Your RSVP has been recorded successfully.",

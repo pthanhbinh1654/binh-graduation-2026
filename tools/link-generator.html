@@ -11,31 +11,44 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=Cormorant+Garamond:wght@600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
 
   <link rel="stylesheet" href="../css/tokens.css" />
   <link rel="stylesheet" href="../css/base.css" />
   <link rel="stylesheet" href="../css/components.css" />
 
   <style>
+    body {
+      background-color: var(--color-bg);
+      color: var(--color-text);
+      font-family: var(--font-body);
+    }
     .tool-header {
       text-align: center;
       padding-top: var(--space-xl);
       margin-bottom: var(--space-lg);
     }
     .tool-title {
+      font-family: var(--font-heading);
       font-size: var(--text-2xl);
-      color: var(--color-accent-light);
+      color: var(--color-text);
+      font-weight: 500;
       margin-bottom: var(--space-xs);
     }
     .tool-desc {
       color: var(--color-text-muted);
-      max-width: 650px;
+      max-width: 620px;
       margin: 0 auto;
       font-size: var(--text-sm);
+      line-height: 1.6;
     }
     .generator-card {
-      margin-bottom: var(--space-xl);
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md);
+      padding: var(--space-lg);
+      box-shadow: var(--shadow-card);
+      margin-bottom: var(--space-lg);
     }
     .options-row {
       display: grid;
@@ -49,10 +62,12 @@
       }
     }
     .table-container {
-      margin-top: var(--space-xl);
+      margin-top: var(--space-lg);
       overflow-x: auto;
       border-radius: var(--radius-md);
       border: 1px solid var(--color-border);
+      background: var(--color-surface);
+      box-shadow: var(--shadow-card);
     }
     table {
       width: 100%;
@@ -61,38 +76,52 @@
       text-align: left;
     }
     th, td {
-      padding: 12px 16px;
+      padding: 12px 14px;
       border-bottom: 1px solid var(--color-border-subtle);
     }
     th {
-      background: rgba(201, 168, 76, 0.1);
-      color: var(--color-accent-light);
+      background: var(--color-surface-muted);
+      color: var(--color-text);
+      font-family: var(--font-heading);
+      font-size: var(--text-base);
       font-weight: 600;
+      letter-spacing: 0.02em;
+    }
+    tr:last-child td {
+      border-bottom: none;
     }
     tr:hover td {
-      background: rgba(255, 255, 255, 0.02);
+      background: rgba(164, 138, 87, 0.03);
     }
     .link-cell {
-      max-width: 280px;
+      max-width: 260px;
       word-break: break-all;
-      color: var(--color-accent-light);
+      color: var(--color-accent);
       font-family: var(--font-mono);
-      font-size: 0.8rem;
+      font-size: 0.78rem;
     }
     .qr-thumb-wrap {
-      width: 64px;
-      height: 64px;
-      background: #fff;
-      padding: 4px;
+      width: 52px;
+      height: 52px;
+      background: #FFFFFF;
+      padding: 3px;
+      border: 1px solid var(--color-border);
       border-radius: var(--radius-sm);
       display: inline-flex;
       align-items: center;
       justify-content: center;
       cursor: pointer;
+      box-shadow: var(--shadow-sm);
+      transition: transform var(--duration-fast) var(--easing);
+    }
+    .qr-thumb-wrap:hover {
+      transform: scale(1.08);
+      border-color: var(--color-accent);
     }
     .qr-thumb-wrap svg {
       width: 100%;
       height: 100%;
+      display: block;
     }
     .action-bar {
       display: flex;
@@ -102,11 +131,14 @@
       flex-wrap: wrap;
       gap: var(--space-sm);
     }
+
     /* Modal for enlarged QR */
     .qr-modal {
       position: fixed;
       inset: 0;
-      background: rgba(0,0,0,0.85);
+      background: rgba(37, 40, 32, 0.65);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
       z-index: 10005;
       display: flex;
       align-items: center;
@@ -121,20 +153,23 @@
       pointer-events: auto;
     }
     .qr-modal-content {
-      background: #0f172a;
-      border: 1px solid var(--color-accent);
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
       border-radius: var(--radius-lg);
       padding: var(--space-lg);
       text-align: center;
-      max-width: 360px;
+      max-width: 380px;
       width: 100%;
+      box-shadow: var(--shadow-elevated);
     }
     .qr-modal-image-box {
-      background: #fff;
+      background: #FFFFFF;
       padding: 16px;
+      border: 1px solid var(--color-border);
       border-radius: var(--radius-md);
       margin: var(--space-md) auto;
       display: inline-block;
+      box-shadow: var(--shadow-sm);
     }
     .qr-modal-image-box svg {
       width: 220px;
@@ -146,10 +181,10 @@
 <body>
   <div class="container" style="padding-bottom: var(--space-xl);">
     <header class="tool-header">
-      <div class="hero-monogram-placeholder" style="width: 56px; height: 56px; font-size: 1.3rem; margin: 0 auto var(--space-sm); border: 2px solid var(--color-accent);" aria-label="PTB Monogram">PTB</div>
+      <div class="hero-monogram-placeholder" style="width: 56px; height: 56px; font-size: 1.3rem; margin: 0 auto var(--space-sm); border: 1px solid var(--color-accent); background: var(--color-surface);" aria-label="PTB Monogram">PTB</div>
       <h1 class="tool-title">Công Cụ Tạo Link Mời Khách Hàng Loạt</h1>
       <p class="tool-desc">
-        Nhập danh sách tên khách mời (mỗi người 1 dòng), công cụ sẽ tự động tạo đường link cá nhân hóa và mã QR tương ứng để gửi cho bạn bè, người thân hoặc thầy cô.
+        Nhập danh sách tên khách mời (mỗi người 1 dòng). Công cụ sẽ tự động sinh đường link cá nhân hóa và mã QR tương ứng để gửi thiệp nhanh chóng.
       </p>
     </header>
 
@@ -157,45 +192,55 @@
       <div class="options-row">
         <div class="form-group" style="margin-bottom: 0;">
           <label for="base-url-input" class="form-label">Tên miền trang web:</label>
-          <input type="text" id="base-url-input" class="form-input" value="https://binh-tn2026.pages.dev/" />
+          <input type="text" id="base-url-input" class="form-input" placeholder="https://..." />
         </div>
         <div class="form-group" style="margin-bottom: 0;">
           <label for="lang-select" class="form-label">Ngôn ngữ mặc định:</label>
           <select id="lang-select" class="form-input">
             <option value="vi">Tiếng Việt (mặc định)</option>
-            <option value="en">English (?lang=en)</option>
+            <option value="en">English (tiếng Anh)</option>
           </select>
         </div>
       </div>
 
       <div class="form-group">
-        <label for="names-input" class="form-label">Danh sách khách mời (mỗi tên một dòng):</label>
-        <textarea id="names-input" class="form-textarea" style="height: 140px;" placeholder="Ví dụ:&#10;Thầy Nam&#10;Cô Hương&#10;Bạn Minh&#10;Gia đình anh Tuấn&#10;Em Linh"></textarea>
+        <label for="names-input" class="form-label">
+          Danh sách khách mời (mỗi người 1 dòng):
+        </label>
+        <textarea id="names-input" class="form-textarea" style="height: 140px;" placeholder="Ví dụ:
+Thầy Nam
+Cô Lan
+Bạn Minh
+Gia đình anh Tuấn
+Em Linh"></textarea>
       </div>
 
-      <div style="display: flex; gap: var(--space-sm); flex-wrap: wrap;">
-        <button id="btn-generate" type="button" class="btn btn-primary">
-          <span>✨</span>
-          <span>Tạo Danh Sách Link</span>
-        </button>
-        <button id="btn-sample" type="button" class="btn btn-secondary">
-          <span>📝</span>
-          <span>Điền Mẫu Thử</span>
-        </button>
-        <button id="btn-clear" type="button" class="btn btn-secondary">
-          <span>🗑️</span>
-          <span>Xóa Dữ Liệu</span>
-        </button>
+      <div class="action-bar">
+        <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+          <button id="btn-generate" type="button" class="btn btn-primary">
+            <span>✨</span> <span>Tạo link hàng loạt</span>
+          </button>
+          <button id="btn-sample" type="button" class="btn btn-secondary">
+            <span>📝</span> <span>Nạp danh sách mẫu</span>
+          </button>
+          <button id="btn-clear" type="button" class="btn btn-secondary">
+            <span>🗑️</span> <span>Xóa trắng</span>
+          </button>
+        </div>
+        <a href="/" class="btn btn-secondary">
+          <span>🏠</span> <span>Về trang thiệp mời</span>
+        </a>
       </div>
     </div>
 
-    <!-- Output Section -->
+    <!-- Results Section -->
     <div id="results-wrapper" style="display: none;">
-      <div class="action-bar">
-        <h2 style="font-size: var(--text-lg); color: var(--color-accent-light);" id="count-summary">Danh Sách Đã Tạo (0)</h2>
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-xs); flex-wrap: wrap; gap: 10px;">
+        <h2 id="count-summary" class="section-title" style="font-size: var(--text-xl); margin: 0;">
+          Danh Sách Đã Tạo
+        </h2>
         <button id="btn-copy-all" type="button" class="btn btn-secondary">
-          <span>📋</span>
-          <span>Sao Chép Toàn Bộ (Tên + Link)</span>
+          <span>📋</span> <span>Sao chép toàn bộ danh sách</span>
         </button>
       </div>
 
@@ -204,14 +249,14 @@
           <thead>
             <tr>
               <th style="width: 50px;">STT</th>
-              <th>Khách Mời</th>
-              <th>Đường Link Cá Nhân Hóa</th>
-              <th style="width: 100px;">Thao Tác</th>
-              <th style="width: 90px; text-align: center;">Mã QR</th>
+              <th style="width: 200px;">Tên khách</th>
+              <th>Đường link cá nhân hóa</th>
+              <th style="width: 90px; text-align: center;">Sao chép</th>
+              <th style="width: 80px; text-align: center;">Mã QR</th>
             </tr>
           </thead>
           <tbody id="links-tbody">
-            <!-- Rendered by JS -->
+            <!-- Populated by JS -->
           </tbody>
         </table>
       </div>
@@ -221,12 +266,22 @@
   <!-- QR Enlarged Modal -->
   <div id="qr-modal" class="qr-modal" role="dialog" aria-modal="true" aria-labelledby="modal-guest-name">
     <div class="qr-modal-content">
-      <h3 id="modal-guest-name" style="font-family: var(--font-heading); color: var(--color-accent-light); font-size: var(--text-xl);">Tên Khách Mời</h3>
+      <h3 id="modal-guest-name" style="font-family: var(--font-heading); font-size: 1.5rem; color: var(--color-text); margin-bottom: 4px;">Tên khách</h3>
+      <p id="modal-guest-link" style="font-family: var(--font-mono); font-size: 0.75rem; color: var(--color-accent); word-break: break-all; margin-bottom: var(--space-xs);"></p>
+      
       <div id="modal-qr-box" class="qr-modal-image-box"></div>
-      <p id="modal-guest-link" class="link-cell" style="margin-bottom: var(--space-md);"></p>
-      <div style="display: flex; gap: 8px; justify-content: center;">
-        <button id="btn-modal-copy" type="button" class="btn btn-primary">Sao Chép Link</button>
-        <button id="btn-modal-close" type="button" class="btn btn-secondary">Đóng</button>
+      
+      <p style="font-size: var(--text-xs); color: var(--color-text-muted); margin-bottom: var(--space-md);">
+        Quét mã để mở trực tiếp trên điện thoại
+      </p>
+
+      <div style="display: flex; justify-content: center; gap: 8px;">
+        <button id="btn-modal-copy" type="button" class="btn btn-primary">
+          <span>📋</span> <span>Sao chép link</span>
+        </button>
+        <button id="btn-modal-close" type="button" class="btn btn-secondary">
+          <span>Đóng</span>
+        </button>
       </div>
     </div>
   </div>
@@ -234,7 +289,7 @@
   <!-- Toast -->
   <div id="toast" class="toast-notification" role="status" aria-live="polite"></div>
 
-  <!-- Local QR generator library -->
+  <!-- QR Code Vendor Lib -->
   <script src="../vendor/qrcode.min.js"></script>
 
   <script>
@@ -244,27 +299,64 @@
     const btnGenerate = document.getElementById('btn-generate');
     const btnSample = document.getElementById('btn-sample');
     const btnClear = document.getElementById('btn-clear');
-    const resultsWrapper = document.getElementById('results-wrapper');
-    const linksTbody = document.getElementById('links-tbody');
-    const countSummary = document.getElementById('count-summary');
     const btnCopyAll = document.getElementById('btn-copy-all');
+    const resultsWrapper = document.getElementById('results-wrapper');
+    const countSummary = document.getElementById('count-summary');
+    const linksTbody = document.getElementById('links-tbody');
     const toast = document.getElementById('toast');
 
-    // Modal elements
+    // QR Modal Elements
     const qrModal = document.getElementById('qr-modal');
     const modalGuestName = document.getElementById('modal-guest-name');
-    const modalQrBox = document.getElementById('modal-qr-box');
     const modalGuestLink = document.getElementById('modal-guest-link');
+    const modalQrBox = document.getElementById('modal-qr-box');
     const btnModalCopy = document.getElementById('btn-modal-copy');
     const btnModalClose = document.getElementById('btn-modal-close');
 
     let currentGeneratedLinks = [];
     let currentModalLink = '';
 
+    // Auto-detect current domain dynamically on page load!
+    document.addEventListener('DOMContentLoaded', () => {
+      if (window.location.origin && window.location.origin !== 'null') {
+        baseUrlInput.value = window.location.origin + '/';
+      } else {
+        baseUrlInput.value = 'https://binhtn2026.pthanhbinh1654.workers.dev/';
+      }
+    });
+
     function showToast(msg) {
       toast.textContent = msg;
       toast.classList.add('show');
-      setTimeout(() => toast.classList.remove('show'), 2800);
+      setTimeout(() => toast.classList.remove('show'), 2600);
+    }
+
+    function copyToClipboard(text, successMsg) {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(() => {
+          showToast(successMsg);
+        }).catch(() => {
+          fallbackCopy(text, successMsg);
+        });
+      } else {
+        fallbackCopy(text, successMsg);
+      }
+    }
+
+    function fallbackCopy(text, successMsg) {
+      const ta = document.createElement('textarea');
+      ta.value = text;
+      ta.style.position = 'fixed';
+      ta.style.opacity = '0';
+      document.body.appendChild(ta);
+      ta.select();
+      try {
+        document.execCommand('copy');
+        showToast(successMsg);
+      } catch (err) {
+        prompt('Sao chép đường link bên dưới:', text);
+      }
+      document.body.removeChild(ta);
     }
 
     function createQrSvg(url, size) {
@@ -276,9 +368,38 @@
           return qr.createSvgTag({ cellSize: size, margin: 1, scalable: true });
         }
       } catch (e) {
-        console.warn(e);
+        console.warn('QR generation error:', e);
       }
-      return '<span>QR Error</span>';
+      return '<span style="font-size:0.75rem; color:var(--color-text-muted);">QR</span>';
+    }
+
+    function buildPersonalizedUrl(base, name, lang) {
+      let cleanBase = (base || '').trim();
+      if (!cleanBase) {
+        cleanBase = window.location.origin || 'https://binhtn2026.pthanhbinh1654.workers.dev';
+      }
+      if (!/^https?:\/\//i.test(cleanBase)) {
+        cleanBase = 'https://' + cleanBase;
+      }
+      if (!cleanBase.endsWith('/')) {
+        cleanBase += '/';
+      }
+
+      const slug = name.trim().replace(/\s+/g, '-');
+
+      try {
+        const urlObj = new URL(cleanBase);
+        urlObj.searchParams.set('khach', slug);
+        if (lang === 'en') {
+          urlObj.searchParams.set('lang', 'en');
+        }
+        return urlObj.toString();
+      } catch (e) {
+        const query = lang === 'en' 
+          ? `?khach=${encodeURIComponent(slug)}&lang=en` 
+          : `?khach=${encodeURIComponent(slug)}`;
+        return cleanBase + query;
+      }
     }
 
     function generateLinks() {
@@ -288,9 +409,7 @@
         return;
       }
 
-      let baseUrl = baseUrlInput.value.trim();
-      if (!baseUrl.endsWith('/')) baseUrl += '/';
-
+      const baseUrl = baseUrlInput.value.trim();
       const lang = langSelect.value;
       const lines = rawText.split('\n').map(l => l.trim()).filter(l => l.length > 0);
 
@@ -298,15 +417,7 @@
       linksTbody.innerHTML = '';
 
       lines.forEach((name, idx) => {
-        // Create clean hyphenated or URL encoded format
-        const cleanSlug = name.replace(/\s+/g, '-');
-        const urlObj = new URL(baseUrl);
-        urlObj.searchParams.set('khach', cleanSlug);
-        if (lang === 'en') {
-          urlObj.searchParams.set('lang', 'en');
-        }
-
-        const fullUrl = urlObj.toString();
+        const fullUrl = buildPersonalizedUrl(baseUrl, name, lang);
         currentGeneratedLinks.push({ name, url: fullUrl });
 
         const tr = document.createElement('tr');
@@ -317,7 +428,7 @@
 
         // Name
         const tdName = document.createElement('td');
-        tdName.style.fontWeight = '600';
+        tdName.style.fontWeight = '500';
         tdName.textContent = name;
 
         // Link
@@ -327,15 +438,14 @@
 
         // Action: Copy
         const tdAction = document.createElement('td');
+        tdAction.style.textAlign = 'center';
         const copyBtn = document.createElement('button');
         copyBtn.className = 'btn btn-secondary';
-        copyBtn.style.padding = '4px 10px';
+        copyBtn.style.padding = '6px 12px';
         copyBtn.style.fontSize = '0.75rem';
         copyBtn.textContent = 'Copy';
         copyBtn.addEventListener('click', () => {
-          navigator.clipboard.writeText(fullUrl).then(() => {
-            showToast(`Đã sao chép link của ${name}!`);
-          });
+          copyToClipboard(fullUrl, `Đã sao chép link của ${name}!`);
         });
         tdAction.appendChild(copyBtn);
 
@@ -360,7 +470,7 @@
         linksTbody.appendChild(tr);
       });
 
-      countSummary.textContent = `Danh Sách Đã Tạo (${lines.length})`;
+      countSummary.textContent = `Danh Sách Đã Tạo (${lines.length} người)`;
       resultsWrapper.style.display = 'block';
       showToast(`Đã tạo thành công ${lines.length} đường link!`);
     }
@@ -369,7 +479,7 @@
       currentModalLink = url;
       modalGuestName.textContent = name;
       modalGuestLink.textContent = url;
-      modalQrBox.innerHTML = createQrSvg(url, 5);
+      modalQrBox.innerHTML = createQrSvg(url, 6);
       qrModal.classList.add('show');
     }
 
@@ -384,9 +494,7 @@
 
     btnModalCopy.addEventListener('click', () => {
       if (currentModalLink) {
-        navigator.clipboard.writeText(currentModalLink).then(() => {
-          showToast('Đã sao chép link!');
-        });
+        copyToClipboard(currentModalLink, 'Đã sao chép link!');
       }
     });
 
@@ -399,7 +507,7 @@
         'Bạn Minh',
         'Gia đình anh Tuấn',
         'Em Linh',
-        'Nhóm bạn cấp 3'
+        'Nhóm bạn thân'
       ].join('\n');
       generateLinks();
     });
@@ -414,9 +522,7 @@
     btnCopyAll.addEventListener('click', () => {
       if (currentGeneratedLinks.length === 0) return;
       const textBlock = currentGeneratedLinks.map(item => `${item.name}: ${item.url}`).join('\n');
-      navigator.clipboard.writeText(textBlock).then(() => {
-        showToast(`Đã sao chép toàn bộ ${currentGeneratedLinks.length} đường link vào clipboard!`);
-      });
+      copyToClipboard(textBlock, `Đã sao chép toàn bộ ${currentGeneratedLinks.length} đường link!`);
     });
   </script>
 </body>

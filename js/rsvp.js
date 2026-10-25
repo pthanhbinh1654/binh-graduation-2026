@@ -28,9 +28,11 @@ export function initRsvp(config, getLang = () => 'vi') {
   function checkAlreadySubmitted() {
     const lang = getLang();
     const t = i18n[lang].rsvp;
-    if (localStorage.getItem('rsvp_sent')) {
+    const sentData = localStorage.getItem('rsvp_sent');
+    if (sentData) {
       alertBox.className = 'form-status-alert success';
       alertBox.textContent = t.alreadySubmitted;
+      alertBox.style.display = 'block';
       return true;
     }
     return false;

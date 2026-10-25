@@ -72,7 +72,6 @@
         <a href="#timeline" class="nav-link" data-i18n="nav.timeline">Lịch trình</a>
         <a href="#venue" class="nav-link" data-i18n="nav.venue">Địa điểm</a>
         <a href="#rsvp" class="nav-link" data-i18n="nav.rsvp">Xác nhận</a>
-        <a href="#guestbook" class="nav-link" data-i18n="nav.guestbook">Lưu bút</a>
       </div>
 
       <div class="nav-actions">
@@ -210,12 +209,6 @@
               <a id="btn-directions" href="#" target="_blank" rel="noopener noreferrer" class="btn btn-secondary">
                 <span>🧭</span> <span data-i18n="venue.directions">Chỉ đường</span>
               </a>
-              <a id="btn-grab" href="#" target="_blank" rel="noopener noreferrer" class="btn btn-secondary">
-                <span>🚗</span> <span data-i18n="venue.grab">Đặt Grab</span>
-              </a>
-              <a id="btn-be" href="#" target="_blank" rel="noopener noreferrer" class="btn btn-secondary">
-                <span>🛵</span> <span data-i18n="venue.be">Đặt Be</span>
-              </a>
               <button id="btn-copy-address" type="button" class="btn btn-primary">
                 <span>📋</span> <span data-i18n="venue.copyAddress">Sao chép địa chỉ</span>
               </button>
@@ -252,8 +245,11 @@
         </div>
 
         <div class="calendar-actions fade-up">
-          <a id="btn-gcal" href="#" class="btn btn-primary" target="_blank" rel="noopener noreferrer">
-            <span>📅</span> <span data-i18n="calendar.googleCal">Google Calendar</span>
+          <button id="btn-apple-cal" type="button" class="btn btn-primary">
+            <span>🍎</span> <span data-i18n="calendar.appleCal">Thêm vào iPhone (Apple Calendar)</span>
+          </button>
+          <a id="btn-gcal" href="#" class="btn btn-secondary" target="_blank" rel="noopener noreferrer">
+            <span>🤖</span> <span data-i18n="calendar.googleCal">Thêm vào Android (Google Calendar)</span>
           </a>
         </div>
       </div>
@@ -303,50 +299,6 @@
           </form>
 
           <div id="rsvp-status" class="form-status-alert" role="alert"></div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Guestbook Section (#guestbook) -->
-    <section id="guestbook" class="section-block" aria-labelledby="guestbook-title">
-      <div class="container guestbook-container">
-        <div class="section-header fade-up">
-          <h2 id="guestbook-title" class="section-title" data-i18n="guestbook.title">Sổ lưu bút</h2>
-          <div class="section-divider"></div>
-          <p class="section-subtitle" data-i18n="guestbook.subtitle">Gửi những lời chúc tốt đẹp nhất đến tân kỹ sư</p>
-        </div>
-
-        <!-- Form Card -->
-        <div class="card fade-up">
-          <form id="guestbook-form" novalidate>
-            <div class="form-group">
-              <label for="gb-name" class="form-label" data-i18n="guestbook.nameLabel">Tên của bạn</label>
-              <input type="text" id="gb-name" name="name" class="form-input" data-i18n-placeholder="guestbook.namePlaceholder" placeholder="Tên của bạn..." required maxlength="100" />
-            </div>
-
-            <div class="form-group">
-              <label for="gb-message" class="form-label" data-i18n="guestbook.messageLabel">Lời chúc</label>
-              <textarea id="gb-message" name="message" class="form-textarea" data-i18n-placeholder="guestbook.messagePlaceholder" placeholder="Chúc Bình tốt nghiệp may mắn, thành công..." required maxlength="300"></textarea>
-              <span id="gb-char-count" class="char-counter">0/300 ký tự</span>
-            </div>
-
-            <button id="gb-submit-btn" type="submit" class="btn btn-primary" style="width: 100%;">
-              <span data-i18n="guestbook.submitBtn">Gửi lời chúc</span>
-            </button>
-          </form>
-
-          <div id="gb-status" class="form-status-alert" role="alert"></div>
-        </div>
-
-        <!-- Guestbook Entries List -->
-        <div id="guestbook-list" class="guestbook-list" aria-live="polite">
-          <!-- Populated by JS -->
-        </div>
-
-        <div class="guestbook-pagination">
-          <button id="gb-load-more" type="button" class="btn btn-secondary" style="display: none;">
-            <span data-i18n="guestbook.seeMore">Xem thêm lời chúc</span>
-          </button>
         </div>
       </div>
     </section>

@@ -1,134 +1,105 @@
 /**
  * ============================================================================
- * GOOGLE APPS SCRIPT BACKEND: LỄ TỐT NGHIỆP - PHAN THANH BÌNH (2026)
+ * GOOGLE APPS SCRIPT: QUẢN LÝ KHÁCH MỜI TỐT NGHIỆP - PHAN THANH BÌNH (2026)
  * ============================================================================
- * Handles RSVP confirmations and Guestbook submissions.
- * Stores data directly into Google Sheets.
+ * Tự động nhận phản hồi Xác nhận tham dự (RSVP) và Lời nhắn/Lời chúc từ web thiệp mời.
+ * Dữ liệu lưu trực tiếp vào Google Trang tính (Google Sheets) của bạn theo thời gian thực.
  */
 
-const RSVP_SHEET = "RSVP";
-const GUESTBOOK_SHEET = "Luu But";
-
+const SHEET_NAME = "Danh Sach Khach";
 const MAX_NAME_LENGTH = 100;
-const MAX_RSVP_MESSAGE_LENGTH = 500;
-const MAX_GUESTBOOK_LENGTH = 300;
+const MAX_MESSAGE_LENGTH = 500;
 
 /**
- * Setup helper: Run this once from the Apps Script editor to initialize sheets with headers.
+ * Khởi tạo tiêu đề cột trong Google Sheet (Chạy 1 lần khi cài đặt)
  */
 function initialSetup() {
   const ss = SpreadsheetApp.getActiveSpreadsheet();
+  let sheet = ss.getSheetByName(SHEET_NAME);
+  if (!sheet) {
+    sheet = ss.insertSheet(SHEET_NAME);
+  }
+  
+  // Tạo hàng tiêu đề rõ ràng
+  if (sheet.getLastRow() === 0) {
+    sheet.appendRow([
+      "Thời gian gửi", 
+      "Họ và tên khách mời", 
+      "Trạng thái tham dự", 
+      "Lời nhắn / Lời chúc gửi Bình",
+      "Ghi chú hệ thống"
+    ]);
+    sheet.getRange(1, 1, 1, 5)
+      .setFontWeight("bold")
+      .setBackground("#A48A57")
+      .setFontColor("#FFFFFF");
+    sheet.setFrozenRows(1);
+    sheet.setColumnWidth(1, 160);
+    sheet.setColumnWidth(2, 200);
+    sheet.setColumnWidth(3, 160);
+    sheet.setColumnWidth(4, 350);
+  }
 
-  // 1. Setup RSVP Sheet
-  let rsvpSheet = ss.getSheetByName(RSVP_SHEET);
-  if (!rsvpSheet) {
-    rsvpSheet = ss.insertSheet(RSVP_SHEET);
-  }
-  if (rsvpSheet.getLastRow() === 0) {
-    rsvpSheet.appendRow(["Thời gian", "Họ và tên", "Tham dự?", "Lời nhắn", "Nguồn / Ghi chú"]);
-    rsvpSheet.getRange(1, 1, 1, 5).setFontWeight("bold").setBackground("#c9a84c").setFontColor("#0a0f1e");
-  }
-
-  // 2. Setup Guestbook (Luu But) Sheet
-  let gbSheet = ss.getSheetByName(GUESTBOOK_SHEET);
-  if (!gbSheet) {
-    gbSheet = ss.insertSheet(GUESTBOOK_SHEET);
-  }
-  if (gbSheet.getLastRow() === 0) {
-    gbSheet.appendRow(["Thời gian", "Tên khách", "Lời chúc", "Trạng thái"]);
-    gbSheet.getRange(1, 1, 1, 4).setFontWeight("bold").setBackground("#c9a84c").setFontColor("#0a0f1e");
-  }
-
-  Logger.log("Khoi tao cac Sheet hoan tat!");
+  Logger.log("Đã khởi tạo bảng tính thành công!");
 }
 
 /**
- * Handle POST requests (RSVP submissions & Guestbook entries)
+ * Nhận dữ liệu POST từ web thiệp mời khi khách bấm gửi
  */
 function doPost(e) {
   const lock = LockService.getScriptLock();
 
   try {
-    // Wait for up to 10 seconds for concurrent write operations
+    // Chờ tối đa 10 giây nếu nhiều người gửi cùng lúc
     lock.waitLock(10000);
 
     if (!e || !e.postData || !e.postData.contents) {
-      return createJsonResponse({ status: "error", message: "No data received" });
+      return createJsonResponse({ status: "error", message: "Không nhận được dữ liệu" });
     }
 
     let data;
     try {
       data = JSON.parse(e.postData.contents);
     } catch (parseErr) {
-      return createJsonResponse({ status: "error", message: "Invalid JSON format" });
+      return createJsonResponse({ status: "error", message: "Sai định dạng dữ liệu" });
     }
 
-    // Honeypot check: If the website field is filled, silently discard spam
+    // Bẫy Honeypot chống bot spam (nếu trường ẩn website có giá trị thì bỏ qua)
     if (data.website && String(data.website).trim() !== "") {
       return createJsonResponse({ status: "success", message: "OK" });
     }
 
-    const action = data.action || (data.attending ? "rsvp" : "guestbook");
     const ss = SpreadsheetApp.getActiveSpreadsheet();
-
-    // ------------------------------------------------------------------------
-    // Action: RSVP
-    // ------------------------------------------------------------------------
-    if (action === "rsvp") {
-      let sheet = ss.getSheetByName(RSVP_SHEET);
-      if (!sheet) {
-        initialSetup();
-        sheet = ss.getSheetByName(RSVP_SHEET);
-      }
-
-      const name = sanitize(data.name || "Khách", MAX_NAME_LENGTH);
-      const attending = data.attending === "yes" || data.attending === "có" || data.attending === true ? "Có tham dự 🎉" : "Không thể tham dự 💌";
-      const message = sanitize(data.message || "", MAX_RSVP_MESSAGE_LENGTH);
-      const timestamp = new Date();
-
-      sheet.appendRow([timestamp, name, attending, message, data.timestamp || ""]);
-
-      return createJsonResponse({
-        status: "success",
-        message: "RSVP recorded successfully"
-      });
+    let sheet = ss.getSheetByName(SHEET_NAME);
+    if (!sheet) {
+      initialSetup();
+      sheet = ss.getSheetByName(SHEET_NAME);
     }
 
-    // ------------------------------------------------------------------------
-    // Action: Guestbook (Lưu bút)
-    // ------------------------------------------------------------------------
-    if (action === "guestbook") {
-      let sheet = ss.getSheetByName(GUESTBOOK_SHEET);
-      if (!sheet) {
-        initialSetup();
-        sheet = ss.getSheetByName(GUESTBOOK_SHEET);
-      }
+    const name = sanitize(data.name || "Khách mời", MAX_NAME_LENGTH);
+    const attending = (data.attending === "yes" || data.attending === "có" || data.attending === true)
+      ? "Sẽ đến tham dự 🎉" 
+      : "Rất tiếc mình bận 💌";
+    const message = sanitize(data.message || "", MAX_MESSAGE_LENGTH);
+    const now = new Date();
+    const timeFormatted = Utilities.formatDate(now, "Asia/Ho_Chi_Minh", "dd/MM/yyyy HH:mm:ss");
 
-      const name = sanitize(data.name || "Ẩn danh", MAX_NAME_LENGTH);
-      const message = sanitize(data.message || "", MAX_GUESTBOOK_LENGTH);
-      const timestamp = new Date();
+    // Thêm dòng mới vào Google Sheet
+    sheet.appendRow([
+      timeFormatted, 
+      name, 
+      attending, 
+      message || "(Không có lời nhắn)",
+      "Gửi từ Web"
+    ]);
 
-      if (!message) {
-        return createJsonResponse({ status: "error", message: "Message cannot be empty" });
-      }
-
-      sheet.appendRow([timestamp, name, message, "APPROVED"]);
-
-      return createJsonResponse({
-        status: "success",
-        message: "Guestbook message recorded",
-        entry: {
-          name: name,
-          message: message,
-          timestamp: timestamp.toISOString()
-        }
-      });
-    }
-
-    return createJsonResponse({ status: "error", message: "Unknown action" });
+    return createJsonResponse({
+      status: "success",
+      message: "Đã ghi nhận phản hồi thành công"
+    });
 
   } catch (err) {
-    Logger.log("Error in doPost: " + err.toString());
+    Logger.log("Lỗi: " + err.toString());
     return createJsonResponse({ status: "error", message: err.toString() });
   } finally {
     lock.releaseLock();
@@ -136,71 +107,18 @@ function doPost(e) {
 }
 
 /**
- * Handle GET requests (Fetch approved guestbook messages)
+ * Kiểm tra trạng thái Web App
  */
 function doGet(e) {
-  try {
-    const action = e && e.parameter ? e.parameter.action : "";
-
-    if (action === "guestbook") {
-      const ss = SpreadsheetApp.getActiveSpreadsheet();
-      const sheet = ss.getSheetByName(GUESTBOOK_SHEET);
-
-      if (!sheet) {
-        return createJsonResponse({ entries: [] });
-      }
-
-      const lastRow = sheet.getLastRow();
-      if (lastRow <= 1) {
-        return createJsonResponse({ entries: [] });
-      }
-
-      // Read columns: Timestamp, Name, Message, Status
-      const data = sheet.getRange(2, 1, lastRow - 1, 4).getValues();
-      const entries = [];
-
-      for (let i = 0; i < data.length; i++) {
-        const row = data[i];
-        const status = String(row[3]).trim().toUpperCase();
-
-        // Include all entries unless marked SPAM or REJECTED
-        if (status !== "REJECTED" && status !== "SPAM") {
-          let timeIso = "";
-          try {
-            timeIso = new Date(row[0]).toISOString();
-          } catch (_) {
-            timeIso = new Date().toISOString();
-          }
-
-          entries.push({
-            id: i + 1,
-            name: String(row[1] || "Bạn của Bình"),
-            message: String(row[2] || ""),
-            timestamp: timeIso
-          });
-        }
-      }
-
-      // Sort newest first
-      entries.reverse();
-
-      return createJsonResponse({ entries: entries });
-    }
-
-    return createJsonResponse({
-      status: "ok",
-      service: "Graduation Invitation API - Phan Thanh Binh 2026",
-      timestamp: new Date().toISOString()
-    });
-
-  } catch (err) {
-    Logger.log("Error in doGet: " + err.toString());
-    return createJsonResponse({ status: "error", message: err.toString() });
-  }
+  return createJsonResponse({
+    status: "ok",
+    service: "Phan Thanh Binh - Graduation RSVP API",
+    time: Utilities.formatDate(new Date(), "Asia/Ho_Chi_Minh", "dd/MM/yyyy HH:mm:ss")
+  });
 }
 
 /**
- * Helper to clean and sanitize input
+ * Làm sạch chuỗi dữ liệu
  */
 function sanitize(input, maxLength) {
   if (input === null || input === undefined) return "";
@@ -212,7 +130,7 @@ function sanitize(input, maxLength) {
 }
 
 /**
- * Helper to return JSON with proper MIME type
+ * Trả về kết quả JSON chuẩn
  */
 function createJsonResponse(data) {
   return ContentService.createTextOutput(JSON.stringify(data))

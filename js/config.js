@@ -1,5 +1,7 @@
 export const config = {
-  siteUrl: "https://binh-tn2026.pages.dev/",
+  siteUrl: (typeof window !== 'undefined' && window.location.origin) 
+    ? (window.location.origin + '/') 
+    : "https://binhtn2026.pthanhbinh1654.workers.dev/",
   owner: "Phan Thanh Bình",
   degree: { vi: "Kỹ sư An toàn thông tin", en: "Engineer of Information Security" },
   school: { vi: "Trường Công nghệ Thông tin và Truyền thông", en: "School of Information and Communication Technology" },

@@ -285,24 +285,6 @@ document.addEventListener('DOMContentLoaded', () => {
     btnOpenMaps.href = config.venue.mapsUrl;
   }
 
-  const btnGrab = document.getElementById('btn-grab');
-  const grabDeepLink = `https://grab.onelink.me/2695613898?pid=dlink&c=direct&is_retargeting=true&af_dp=grab%3A%2F%2Fopen%3Fdropoff_latitude%3D${config.venue.lat}%26dropoff_longitude%3D${config.venue.lng}`;
-  setupAppButton(
-    btnGrab,
-    grabDeepLink,
-    () => config.venue.address[currentLang] || config.venue.address.vi,
-    () => showToast(i18n[currentLang].venue.addressCopied)
-  );
-
-  const btnBe = document.getElementById('btn-be');
-  const beDeepLink = `https://begroup.onelink.me/n7vF?af_dp=beapp%3A%2F%2Fbooking%3Fdest_lat%3D${config.venue.lat}%26dest_lng%3D${config.venue.lng}`;
-  setupAppButton(
-    btnBe,
-    beDeepLink,
-    () => config.venue.address[currentLang] || config.venue.address.vi,
-    () => showToast(i18n[currentLang].venue.addressCopied)
-  );
-
   // Init Fade Up animations
   initIntersectionObserver();
 });

@@ -120,23 +120,6 @@ export function initWeather(lat, lng, targetDateIso, getLang = () => 'vi') {
       wrap.appendChild(advice);
     }
 
-    // Cache timestamp note
-    if (weatherData.timestamp) {
-      const timeStr = new Date(weatherData.timestamp).toLocaleTimeString(lang === 'vi' ? 'vi-VN' : 'en-US', {
-        hour: '2-digit',
-        minute: '2-digit',
-        hour12: false
-      });
-      const updateNote = document.createElement('div');
-      updateNote.className = 'weather-fallback-note';
-      updateNote.style.fontSize = 'var(--text-xs)';
-      updateNote.style.padding = 'var(--space-xs) 0 0 0';
-      updateNote.textContent = lang === 'vi'
-        ? `Cập nhật lúc ${timeStr}`
-        : `Updated at ${timeStr}`;
-      wrap.appendChild(updateNote);
-    }
-
     container.appendChild(wrap);
   }
 

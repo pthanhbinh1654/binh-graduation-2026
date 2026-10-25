@@ -2,6 +2,7 @@ import { i18n } from './i18n.js';
 
 export function initCalendar(config, getLang = () => 'vi') {
   const gcalBtn = document.getElementById('btn-gcal');
+  const appleBtn = document.getElementById('btn-apple-cal');
 
   function getEventData() {
     const lang = getLang();
@@ -43,9 +44,63 @@ export function initCalendar(config, getLang = () => 'vi') {
     gcalBtn.setAttribute('rel', 'noopener noreferrer');
   }
 
+  function downloadIcs() {
+    const { title, details, location, startUtc, endUtc } = getEventData();
+    const cleanDetails = details.replace(/\n/g, '\\n');
+    const cleanLocation = location.replace(/\n/g, ' ');
+
+    const icsContent = [
+      'BEGIN:VCALENDAR',
+      'VERSION:2.0',
+      'PRODID:-//Phan Thanh Binh//Graduation Invitation 2026//VI',
+      'CALSCALE:GREGORIAN',
+      'METHOD:PUBLISH',
+      'BEGIN:VEVENT',
+      `UID:ptb-grad-2026-${Date.now()}@binh-tn2026`,
+      `DTSTAMP:${startUtc}`,
+      `DTSTART:${startUtc}`,
+      `DTEND:${endUtc}`,
+      `SUMMARY:${title}`,
+      `DESCRIPTION:${cleanDetails}`,
+      `LOCATION:${cleanLocation}`,
+      'STATUS:CONFIRMED',
+      'BEGIN:VALARM',
+      'TRIGGER:-P1D',
+      'ACTION:DISPLAY',
+      'DESCRIPTION:Nhắc nhở: Lễ Tốt Nghiệp của Bình diễn ra vào ngày mai!',
+      'END:VALARM',
+      'BEGIN:VALARM',
+      'TRIGGER:-PT2H',
+      'ACTION:DISPLAY',
+      'DESCRIPTION:Nhắc nhở: Lễ Tốt Nghiệp của Bình sắp bắt đầu sau 2 giờ nữa!',
+      'END:VALARM',
+      'END:VEVENT',
+      'END:VCALENDAR'
+    ].join('\r\n');
+
+    const blob = new Blob([icsContent], { type: 'text/calendar;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute('download', 'Le-Tot-Nghiep-Phan-Thanh-Binh.ics');
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    setTimeout(() => URL.revokeObjectURL(url), 2000);
+  }
+
   if (gcalBtn) {
     updateGcalLink();
   }
 
-  return updateGcalLink;
+  if (appleBtn) {
+    appleBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      downloadIcs();
+    });
+  }
+
+  return () => {
+    updateGcalLink();
+  };
 }
