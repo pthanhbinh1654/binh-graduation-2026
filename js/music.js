@@ -24,6 +24,12 @@ export function initMusic(musicConfig, getLang = () => 'vi') {
     }
   }
 
+  // Ensure audio src and volume
+  if (!audio.src && musicConfig && musicConfig.src) {
+    audio.src = musicConfig.src;
+  }
+  audio.volume = 0.8;
+
   // Audio lifecycle events
   audio.addEventListener('play', () => {
     isPlaying = true;
@@ -44,6 +50,10 @@ export function initMusic(musicConfig, getLang = () => 'vi') {
   // Toggle on user tap / click
   musicBtn.addEventListener('click', (e) => {
     e.preventDefault();
+    if (!audio.src) {
+      audio.src = (musicConfig && musicConfig.src) ? musicConfig.src : 'assets/audio/thanh-xuan.mp3';
+    }
+    audio.volume = 0.8;
     if (audio.paused) {
       audio.play().then(() => {
         isPlaying = true;

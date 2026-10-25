@@ -95,6 +95,17 @@ export function initCalendar(config, getLang = () => 'vi') {
 
   if (appleBtn) {
     appleBtn.addEventListener('click', (e) => {
+      const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || 
+                    (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+
+      if (isIOS) {
+        e.preventDefault();
+        // webcal:// URL scheme opens Apple Calendar natively across Safari, Chrome iOS, and in-app browsers
+        const webcalUrl = `webcal://${window.location.host}/assets/event.ics`;
+        window.location.href = webcalUrl;
+        return;
+      }
+
       e.preventDefault();
       downloadIcs();
     });

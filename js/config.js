@@ -27,7 +27,7 @@ export const config = {
     facebook: "https://www.facebook.com/binh.thanh.613766/"
   },
   music: { 
-    src: "assets/audio/thanh-xuan.m4a",
+    src: "assets/audio/thanh-xuan.mp3",
     youtubeId: "puVRQK77sEc" 
   },
   flags: {
