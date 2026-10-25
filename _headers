@@ -9,6 +9,9 @@
   Content-Type: text/calendar; charset=utf-8
   Cache-Control: public, max-age=86400
 
+/assets/img/*
+  Cache-Control: public, max-age=0, must-revalidate
+
 /assets/*
   Cache-Control: public, max-age=31536000, immutable
 
