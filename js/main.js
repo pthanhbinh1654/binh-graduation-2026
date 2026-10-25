@@ -1,12 +1,12 @@
-import { config } from './config.js';
-import { i18n } from './i18n.js';
-import { initCountdown } from './countdown.js';
-import { initCalendar } from './calendar.js';
-import { initWeather } from './weather.js';
-import { initRsvp } from './rsvp.js';
-import { initGuestbook } from './guestbook.js';
-import { initMusic } from './music.js';
-import { initShare, showToast } from './share.js';
+import { config } from './config.js?v=20261025_v4';
+import { i18n } from './i18n.js?v=20261025_v4';
+import { initCountdown } from './countdown.js?v=20261025_v4';
+import { initCalendar } from './calendar.js?v=20261025_v4';
+import { initWeather } from './weather.js?v=20261025_v4';
+import { initRsvp } from './rsvp.js?v=20261025_v4';
+import { initGuestbook } from './guestbook.js?v=20261025_v4';
+import { initMusic } from './music.js?v=20261025_v4';
+import { initShare, showToast } from './share.js?v=20261025_v4';
 
 let currentLang = 'vi';
 let guestName = '';

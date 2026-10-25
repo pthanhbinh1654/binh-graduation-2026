@@ -1082,6 +1082,13 @@
     border: 1px solid #ECC4C4;
   }
 
+  .rsvp-card-wrapper {
+    display: block;
+    width: 100%;
+    padding: 0;
+    margin: 0;
+  }
+
   /* RSVP Detailed Confirmation Card */
   .rsvp-confirmation-card {
     background: var(--color-surface);
@@ -1091,6 +1098,15 @@
     box-shadow: var(--shadow-card);
     text-align: left;
     margin-top: var(--space-md);
+  }
+
+  .rsvp-form-container .rsvp-confirmation-card {
+    background: transparent;
+    border: none;
+    border-radius: 0;
+    padding: 0;
+    box-shadow: none;
+    margin-top: 0;
   }
 
   .rsvp-confirm-header {

@@ -1,4 +1,4 @@
-import { i18n } from './i18n.js';
+import { i18n } from './i18n.js?v=20261025_v4';
 
 export function initRsvp(config, getLang = () => 'vi') {
   const form = document.getElementById('rsvp-form');
@@ -28,8 +28,10 @@ export function initRsvp(config, getLang = () => 'vi') {
 
   function renderConfirmationCard(record) {
     const lang = getLang();
+    // Hide the input form to display clean confirmation state
+    form.style.display = 'none';
     alertBox.innerHTML = '';
-    alertBox.className = '';
+    alertBox.className = 'rsvp-card-wrapper';
     alertBox.style.display = 'block';
 
     const card = document.createElement('div');
@@ -146,12 +148,14 @@ export function initRsvp(config, getLang = () => 'vi') {
       : '<span>✏️</span> <span>Update or submit again</span>';
 
     editBtn.addEventListener('click', () => {
-      // Pre-fill form and scroll into view
+      // Restore form, pre-fill inputs and scroll
+      form.style.display = 'block';
       if (nameInput) nameInput.value = record.name;
       const radio = form.querySelector(`input[name="attending"][value="${record.attending}"]`);
       if (radio) radio.checked = true;
       if (messageInput) messageInput.value = record.message || '';
       alertBox.style.display = 'none';
+      form.scrollIntoView({ behavior: 'smooth', block: 'center' });
       if (nameInput) nameInput.focus();
     });
 
@@ -166,12 +170,28 @@ export function initRsvp(config, getLang = () => 'vi') {
 
   function checkExistingRecord() {
     try {
-      const raw = localStorage.getItem('rsvp_record');
+      const params = new URLSearchParams(window.location.search);
+      const urlGuest = params.get('khach') || params.get('guest');
+      let raw = null;
+      if (urlGuest) {
+        const guestKey = 'rsvp_record_' + encodeURIComponent(urlGuest.trim().toLowerCase());
+        raw = localStorage.getItem(guestKey);
+      }
+      if (!raw) {
+        raw = localStorage.getItem('rsvp_record');
+        if (raw && urlGuest) {
+          const rec = JSON.parse(raw);
+          // If stored record belongs to a different person, don't show it for this specific guest URL
+          if (rec && rec.name && rec.name.trim().toLowerCase() !== urlGuest.trim().toLowerCase()) {
+            raw = null;
+          }
+        }
+      }
       if (raw) {
         const record = JSON.parse(raw);
         if (record && record.name) {
           renderConfirmationCard(record);
-          // Pre-fill form inputs
+          // Pre-fill form inputs in case user wants to edit later
           if (nameInput && !nameInput.value) nameInput.value = record.name;
           const radio = form.querySelector(`input[name="attending"][value="${record.attending}"]`);
           if (radio) radio.checked = true;
@@ -279,10 +299,20 @@ export function initRsvp(config, getLang = () => 'vi') {
 
       try {
         localStorage.setItem('rsvp_record', JSON.stringify(record));
+        const guestKey = 'rsvp_record_' + encodeURIComponent(name.trim().toLowerCase());
+        localStorage.setItem(guestKey, JSON.stringify(record));
         localStorage.setItem('rsvp_sent', 'true');
       } catch (_) {}
 
       renderConfirmationCard(record);
+      try {
+        const rsvpSec = document.getElementById('rsvp');
+        if (rsvpSec) {
+          rsvpSec.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        } else {
+          alertBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+      } catch (_) {}
     }
   });
 
