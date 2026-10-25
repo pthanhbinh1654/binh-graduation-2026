@@ -13,11 +13,10 @@ export const config = {
   ],
   venue: {
     name: { vi: "Hội trường Rùa, Đại học Cần Thơ", en: "Turtle Hall, Can Tho University" },
-    note: { vi: "Điểm chụp ảnh: hàng hoa sứ bên phải Hội trường Rùa (nhìn từ ngoài vào)", en: "Photo spot: the frangipani row to the right of Turtle Hall (facing the entrance)" },
+    note: { vi: "📸 Điểm chụp ảnh: hàng hoa sứ bên phải Hội trường Rùa (nhìn từ ngoài vào)", en: "📸 Photo spot: frangipani trees to the right of Turtle Hall (facing entrance)" },
     mapsUrl: "https://maps.app.goo.gl/4Gg1j6V9ZP4A7pup9",
-    // TODO: Verify coordinates for Hội trường Rùa, Đại học Cần Thơ
-    lat: 10.0300,
-    lng: 105.7684,
+    lat: 10.02924,
+    lng: 105.76941,
     address: { vi: "Hội trường Rùa, Đại học Cần Thơ, Đường 3 Tháng 2, Xuân Khánh, Ninh Kiều, Cần Thơ", en: "Turtle Hall, Can Tho University, 3 Thang 2 Street, Xuan Khanh, Ninh Kieu, Can Tho" }
   },
   contact: {

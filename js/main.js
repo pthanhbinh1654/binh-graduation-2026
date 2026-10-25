@@ -6,7 +6,7 @@ import { initWeather } from './weather.js';
 import { initRsvp } from './rsvp.js';
 import { initGuestbook } from './guestbook.js';
 import { initMusic } from './music.js';
-import { initShare } from './share.js';
+import { initShare, showToast } from './share.js';
 
 let currentLang = 'vi';
 let guestName = '';
@@ -235,6 +235,24 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  // Helper for app deep links with clipboard fallback
+  function setupAppButton(btn, deepLink, address, toastFn) {
+    if (!btn) return;
+    btn.addEventListener('click', (e) => {
+      e.preventDefault();
+      // Try to open deep link
+      window.location.href = deepLink;
+      // Fallback: if still on page after 1.5s, copy address
+      setTimeout(() => {
+        if (!document.hidden) {
+          const addr = typeof address === 'function' ? address() : address;
+          navigator.clipboard.writeText(addr).catch(() => {});
+          toastFn();
+        }
+      }, 1500);
+    });
+  }
+
   // Lazy-load map iframe using IntersectionObserver
   const mapContainer = document.getElementById('map-container');
   if (mapContainer) {
@@ -242,7 +260,7 @@ document.addEventListener('DOMContentLoaded', () => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
           const iframe = document.createElement('iframe');
-          iframe.src = 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3928.841544432168!2d105.7661559153337!3d10.029933692830843!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31a0883d2138e6e5%3A0x6b84000305b63004!2zSOG7mWkgdHLGsOG7nW5nIFLDuWEgLSDEkOG6oWkgaOG7jWMgQ-G6p24gVGjGoQ!5e0!3m2!1svi!2s!4v1700000000000!5m2!1svi!2s';
+          iframe.src = `https://maps.google.com/maps?q=10.02924,105.76941&z=17&output=embed&hl=vi`;
           iframe.title = i18n[currentLang].venue.mapAria;
           iframe.loading = 'lazy';
           iframe.allowFullscreen = true;
@@ -267,15 +285,22 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   const btnGrab = document.getElementById('btn-grab');
-  if (btnGrab) {
-    // Grab deep link format
-    btnGrab.href = `https://grab.onelink.me/2695613898?pid=dlink&c=direct&is_retargeting=true&af_dp=grab%3A%2F%2Fopen%3Fdropoff_latitude%3D${config.venue.lat}%26dropoff_longitude%3D${config.venue.lng}`;
-  }
+  const grabDeepLink = `https://grab.onelink.me/2695613898?pid=dlink&c=direct&is_retargeting=true&af_dp=grab%3A%2F%2Fopen%3Fdropoff_latitude%3D${config.venue.lat}%26dropoff_longitude%3D${config.venue.lng}`;
+  setupAppButton(
+    btnGrab,
+    grabDeepLink,
+    () => config.venue.address[currentLang] || config.venue.address.vi,
+    () => showToast(i18n[currentLang].venue.addressCopied)
+  );
 
   const btnBe = document.getElementById('btn-be');
-  if (btnBe) {
-    btnBe.href = `https://begroup.onelink.me/n7vF?af_dp=beapp%3A%2F%2Fbooking%3Fdest_lat%3D${config.venue.lat}%26dest_lng%3D${config.venue.lng}`;
-  }
+  const beDeepLink = `https://begroup.onelink.me/n7vF?af_dp=beapp%3A%2F%2Fbooking%3Fdest_lat%3D${config.venue.lat}%26dest_lng%3D${config.venue.lng}`;
+  setupAppButton(
+    btnBe,
+    beDeepLink,
+    () => config.venue.address[currentLang] || config.venue.address.vi,
+    () => showToast(i18n[currentLang].venue.addressCopied)
+  );
 
   // Init Fade Up animations
   initIntersectionObserver();
