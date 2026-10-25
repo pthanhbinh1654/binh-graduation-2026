@@ -1,0 +1,38 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Phan Thanh Binh//Graduation Invitation 2026//VI
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+X-WR-CALNAME:Lễ Tốt Nghiệp - Phan Thanh Bình
+X-WR-TIMEZONE:Asia/Ho_Chi_Minh
+BEGIN:VTIMEZONE
+TZID:Asia/Ho_Chi_Minh
+X-LIC-LOCATION:Asia/Ho_Chi_Minh
+BEGIN:STANDARD
+TZOFFSETFROM:+0700
+TZOFFSETTO:+0700
+TZNAME:+07
+DTSTART:19700101T000000
+END:STANDARD
+END:VTIMEZONE
+BEGIN:VEVENT
+UID:ptb-grad-2026-cantho@binhtn2026
+DTSTAMP:20261025T000000Z
+DTSTART;TZID=Asia/Ho_Chi_Minh:20261031T133000
+DTEND;TZID=Asia/Ho_Chi_Minh:20261031T173000
+SUMMARY:Lễ Tốt Nghiệp - Phan Thanh Bình
+DESCRIPTION:Lễ tốt nghiệp Kỹ sư An toàn thông tin của Phan Thanh Bình\nTrường Công nghệ Thông tin và Truyền thông - Đại học Cần Thơ\nĐiểm chụp ảnh: hàng hoa sứ bên phải Hội trường Rùa (nhìn từ ngoài vào)\nHotline: 0327397756
+LOCATION:Hội trường Rùa, Đại học Cần Thơ, Đường 3 Tháng 2, Xuân Khánh, Ninh Kiều, Cần Thơ
+STATUS:CONFIRMED
+BEGIN:VALARM
+TRIGGER:-P1D
+ACTION:DISPLAY
+DESCRIPTION:Nhắc nhở: Lễ Tốt Nghiệp của Bình diễn ra vào ngày mai (13:30 tại Hội trường Rùa)!
+END:VALARM
+BEGIN:VALARM
+TRIGGER:-PT2H
+ACTION:DISPLAY
+DESCRIPTION:Nhắc nhở: Lễ Tốt Nghiệp của Bình sắp bắt đầu sau 2 giờ nữa!
+END:VALARM
+END:VEVENT
+END:VCALENDAR
