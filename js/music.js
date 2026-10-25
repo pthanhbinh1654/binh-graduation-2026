@@ -1,14 +1,12 @@
 import { i18n } from './i18n.js';
 
-let player = null;
-let isPlayerReady = false;
 let isPlaying = false;
 
-export function initMusic(youtubeId, getLang = () => 'vi') {
+export function initMusic(musicConfig, getLang = () => 'vi') {
   const musicBtn = document.getElementById('btn-music-toggle');
-  const playerContainer = document.getElementById('yt-player');
+  const audio = document.getElementById('bg-audio');
 
-  if (!musicBtn || !youtubeId) return;
+  if (!musicBtn || !audio) return;
 
   function updateButtonUi() {
     const lang = getLang();
@@ -26,95 +24,54 @@ export function initMusic(youtubeId, getLang = () => 'vi') {
     }
   }
 
-  // Load YouTube IFrame API if not already present
-  if (!window.YT) {
-    const tag = document.createElement('script');
-    tag.src = 'https://www.youtube.com/iframe_api';
-    const firstScriptTag = document.getElementsByTagName('script')[0];
-    firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-  }
+  // Audio lifecycle events
+  audio.addEventListener('play', () => {
+    isPlaying = true;
+    updateButtonUi();
+  });
 
-  window.onYouTubeIframeAPIReady = () => {
-    player = new window.YT.Player('yt-player', {
-      height: '1',
-      width: '1',
-      videoId: youtubeId,
-      playerVars: {
-        autoplay: 0,
-        controls: 0,
-        disablekb: 1,
-        fs: 0,
-        modestbranding: 1,
-        rel: 0,
-        playsinline: 1,
-        loop: 1,
-        playlist: youtubeId
-      },
-      events: {
-        onReady: (event) => {
-          isPlayerReady = true;
-          // Check if previously set to play
-          const pref = localStorage.getItem('music_playing');
-          if (pref === 'true') {
-            try {
-              event.target.unMute();
-              event.target.playVideo();
-              isPlaying = true;
-              updateButtonUi();
-            } catch (_) {}
-          }
-        },
-        onStateChange: (event) => {
-          if (event.data === window.YT.PlayerState.PLAYING) {
-            isPlaying = true;
-            updateButtonUi();
-          } else if (event.data === window.YT.PlayerState.PAUSED) {
-            isPlaying = false;
-            updateButtonUi();
-          } else if (event.data === window.YT.PlayerState.ENDED) {
-            // Loop playback
-            try {
-              player.playVideo();
-            } catch (_) {}
-          }
-        },
-        onError: (err) => {
-          console.warn('YouTube Player error code:', err.data);
-          // Hide floating button and show external link if error
-          musicBtn.style.display = 'none';
-          const fallbackEl = document.getElementById('music-fallback-link');
-          if (fallbackEl) {
-            fallbackEl.style.display = 'inline-block';
-            fallbackEl.href = `https://www.youtube.com/watch?v=${youtubeId}`;
-          }
-        }
-      }
-    });
-  };
+  audio.addEventListener('pause', () => {
+    isPlaying = false;
+    updateButtonUi();
+  });
 
-  musicBtn.addEventListener('click', () => {
-    if (!isPlayerReady || !player) {
-      // If player not ready yet, retry when ready
-      return;
-    }
+  audio.addEventListener('ended', () => {
+    // Loop
+    audio.currentTime = 0;
+    audio.play().catch(() => {});
+  });
 
-    try {
-      if (isPlaying) {
-        player.pauseVideo();
-        isPlaying = false;
-        try { localStorage.setItem('music_playing', 'false'); } catch (_) {}
-      } else {
-        player.unMute();
-        player.setVolume(70);
-        player.playVideo();
+  // Toggle on user tap / click
+  musicBtn.addEventListener('click', (e) => {
+    e.preventDefault();
+    if (audio.paused) {
+      audio.play().then(() => {
         isPlaying = true;
         try { localStorage.setItem('music_playing', 'true'); } catch (_) {}
-      }
+        updateButtonUi();
+      }).catch(err => {
+        console.warn('Audio playback error:', err);
+      });
+    } else {
+      audio.pause();
+      isPlaying = false;
+      try { localStorage.setItem('music_playing', 'false'); } catch (_) {}
       updateButtonUi();
-    } catch (e) {
-      console.warn('Error toggling music:', e);
     }
   });
+
+  // Check saved user preference
+  try {
+    const pref = localStorage.getItem('music_playing');
+    if (pref === 'true') {
+      audio.play().then(() => {
+        isPlaying = true;
+        updateButtonUi();
+      }).catch(() => {
+        // Mobile browsers require user interaction before first audio playback
+      });
+    }
+  } catch (_) {}
 
   updateButtonUi();
 

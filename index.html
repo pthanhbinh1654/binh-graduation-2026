@@ -396,8 +396,10 @@
     <span class="music-icon" aria-hidden="true">♪</span>
   </button>
 
-  <!-- Hidden YouTube Player Container -->
-  <div id="yt-player" style="position: absolute; width: 1px; height: 1px; left: -9999px; top: -9999px;" aria-hidden="true"></div>
+  <!-- Background Music Audio (Native HTML5 Audio - Zero External Video Popup) -->
+  <audio id="bg-audio" preload="none" loop playsinline webkit-playsinline>
+    <source src="assets/audio/thanh-xuan.m4a" type="audio/mp4" />
+  </audio>
 
   <!-- Toast Notification -->
   <div id="toast" class="toast-notification toast" role="status" aria-live="polite"></div>

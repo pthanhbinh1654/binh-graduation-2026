@@ -26,7 +26,10 @@ export const config = {
     zalo: "https://zalo.me/0327397756",
     facebook: "https://www.facebook.com/binh.thanh.613766/"
   },
-  music: { youtubeId: "puVRQK77sEc" },
+  music: { 
+    src: "assets/audio/thanh-xuan.m4a",
+    youtubeId: "puVRQK77sEc" 
+  },
   flags: {
     showPortrait: false,
     showParking: false

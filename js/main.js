@@ -234,7 +234,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const refreshWeather = initWeather(config.venue.lat, config.venue.lng, config.ceremonyStart, getLang);
   const refreshRsvp = initRsvp(config, getLang);
   const refreshGuestbook = initGuestbook(config, getLang);
-  const refreshMusic = initMusic(config.music.youtubeId, getLang);
+  const refreshMusic = initMusic(config.music, getLang);
   const refreshShare = initShare(config, getLang);
 
   // Setup Language Toggle button

@@ -9,6 +9,10 @@
   Content-Type: text/calendar; charset=utf-8
   Cache-Control: public, max-age=86400
 
+/assets/audio/*
+  Content-Type: audio/mp4
+  Cache-Control: public, max-age=31536000, immutable
+
 /assets/*
   Cache-Control: public, max-age=86400
 
