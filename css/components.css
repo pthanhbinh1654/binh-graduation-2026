@@ -92,52 +92,52 @@
     letter-spacing: 0.28em;
     text-transform: uppercase;
     font-weight: 600;
-    margin-bottom: var(--space-xs);
+    margin-bottom: var(--space-md);
   }
 
-  .envelope-prompt {
+  .envelope-recipient-box {
+    margin-bottom: var(--space-md);
+    padding: var(--space-xs) 0;
+  }
+
+  .envelope-to-label {
+    display: block;
     font-family: var(--font-heading);
     font-size: var(--text-xs);
     color: var(--color-text-muted);
-    letter-spacing: 0.18em;
+    letter-spacing: 0.2em;
     text-transform: uppercase;
-    margin-bottom: 4px;
+    margin-bottom: var(--space-2xs);
     font-weight: 500;
   }
 
   .envelope-guest-name {
     font-family: var(--font-heading);
-    font-size: clamp(1.85rem, 5.5vw, 2.5rem);
+    font-size: clamp(2rem, 6vw, 2.75rem);
     color: var(--color-text);
     font-weight: 600;
-    line-height: 1.25;
-    margin-bottom: var(--space-2xs);
+    line-height: 1.2;
+    margin: 0;
     letter-spacing: -0.01em;
     font-style: italic;
   }
 
-  .envelope-subprompt {
-    font-family: var(--font-heading);
+  .envelope-from-line {
     font-size: var(--text-sm);
     color: var(--color-text-muted);
-    font-style: italic;
-    margin-bottom: var(--space-2xs);
-  }
-
-  .envelope-owner-name {
-    font-family: var(--font-heading);
-    font-size: clamp(1.35rem, 3.8vw, 1.65rem);
-    font-weight: 600;
-    color: var(--color-accent);
-    letter-spacing: 0.04em;
-    margin-bottom: 2px;
-  }
-
-  .envelope-owner-degree {
-    font-family: var(--font-body);
-    font-size: var(--text-xs);
-    color: var(--color-text-muted);
     margin-bottom: var(--space-lg);
+    font-style: italic;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+  }
+
+  .envelope-from-line strong {
+    font-family: var(--font-heading);
+    color: var(--color-accent);
+    font-size: 1.05rem;
+    font-style: normal;
     letter-spacing: 0.03em;
   }
 
@@ -576,7 +576,10 @@
     cursor: pointer;
     transition: all var(--duration-fast) var(--easing);
     text-decoration: none;
-    white-space: nowrap;
+    white-space: normal;
+    text-align: center;
+    word-break: break-word;
+    box-sizing: border-box;
   }
 
   .btn-primary {
@@ -943,19 +946,9 @@
     min-height: 48px;
     justify-content: center;
     text-align: center;
-    padding: 12px 18px;
+    padding: 12px 20px;
     font-size: var(--text-sm);
-  }
-
-  @media (min-width: 600px) {
-    .calendar-actions {
-      flex-direction: row;
-      max-width: 620px;
-    }
-    .calendar-actions .btn {
-      width: auto;
-      flex: 1;
-    }
+    box-sizing: border-box;
   }
 
   /* ==========================================================================

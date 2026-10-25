@@ -17,7 +17,11 @@ export function getLang() {
 
 function sanitizeInput(str) {
   if (!str) return '';
-  return str
+  let val = str;
+  try {
+    val = decodeURIComponent(str);
+  } catch (_) {}
+  return val
     .slice(0, 40)
     .replace(/[<>'"`;(){}[\]\\/]/g, '') // remove HTML & code characters
     .replace(/[\x00-\x1F\x7F]/g, '')    // remove control characters
@@ -25,6 +29,19 @@ function sanitizeInput(str) {
     .replace(/\s+/g, ' ')               // normalize spaces
     .trim();
 }
+
+// Immediate initial parse so guestName is available immediately
+try {
+  const initParams = new URLSearchParams(window.location.search);
+  const initKhach = initParams.get('khach') || initParams.get('guest');
+  if (initKhach) {
+    guestName = sanitizeInput(initKhach);
+    const envGuest = document.getElementById('envelope-guest-name');
+    if (envGuest) envGuest.textContent = guestName;
+    const heroGuest = document.getElementById('hero-greeting-text');
+    if (heroGuest) heroGuest.textContent = guestName;
+  }
+} catch (_) {}
 
 function applyI18n() {
   const t = i18n[currentLang];

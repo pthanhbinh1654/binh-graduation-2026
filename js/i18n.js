@@ -4,11 +4,10 @@ export const i18n = {
     envelope: {
       monogram: "PTB",
       badge: "LỄ TỐT NGHIỆP 2026",
-      prompt: "Trân trọng kính mời",
+      toLabel: "Kính mời",
       guestDefault: "Bạn và người thân",
-      subprompt: "đến chung vui Lễ Tốt Nghiệp của",
+      fromLabel: "Từ",
       owner: "Phan Thanh Bình",
-      degree: "Kỹ sư An toàn thông tin • Đại học Cần Thơ",
       openBtn: "Mở thiệp",
       ariaOpen: "Mở phong bì thiệp mời"
     },
@@ -151,11 +150,10 @@ export const i18n = {
     envelope: {
       monogram: "PTB",
       badge: "GRADUATION CEREMONY 2026",
-      prompt: "Cordially invites",
+      toLabel: "Cordially Invites",
       guestDefault: "Dear Friends & Family",
-      subprompt: "to celebrate the Graduation Ceremony of",
+      fromLabel: "From",
       owner: "Phan Thanh Binh",
-      degree: "Information Security Engineer • Can Tho University",
       openBtn: "Open Invitation",
       ariaOpen: "Open invitation envelope"
     },
