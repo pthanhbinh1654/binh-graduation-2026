@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Công Cụ Tạo Link Mời Khách Hàng Loạt | Phan Thanh Bình</title>
+  <meta name="robots" content="noindex, nofollow" />
+  <meta name="theme-color" content="#0a0f1e" />
+
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%230a0f1e'/%3E%3Cpath d='M50 12 L82 24 V52 C82 72 50 88 50 88 C50 88 18 72 18 52 V24 Z' fill='none' stroke='%23c9a84c' stroke-width='4'/%3E%3Ctext x='50' y='58' font-family='Georgia, serif' font-size='26' font-weight='bold' fill='%23e8c97a' text-anchor='middle'%3EPTB%3C/text%3E%3C/svg%3E" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=Cormorant+Garamond:wght@600;700&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="../css/tokens.css" />
+  <link rel="stylesheet" href="../css/base.css" />
+  <link rel="stylesheet" href="../css/components.css" />
+
+  <style>
+    .tool-header {
+      text-align: center;
+      padding-top: var(--space-xl);
+      margin-bottom: var(--space-lg);
+    }
+    .tool-title {
+      font-size: var(--text-2xl);
+      color: var(--color-accent-light);
+      margin-bottom: var(--space-xs);
+    }
+    .tool-desc {
+      color: var(--color-text-muted);
+      max-width: 650px;
+      margin: 0 auto;
+      font-size: var(--text-sm);
+    }
+    .generator-card {
+      margin-bottom: var(--space-xl);
+    }
+    .options-row {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: var(--space-md);
+      margin-bottom: var(--space-md);
+    }
+    @media (max-width: 640px) {
+      .options-row {
+        grid-template-columns: 1fr;
+      }
+    }
+    .table-container {
+      margin-top: var(--space-xl);
+      overflow-x: auto;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--color-border);
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: var(--text-sm);
+      text-align: left;
+    }
+    th, td {
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--color-border-subtle);
+    }
+    th {
+      background: rgba(201, 168, 76, 0.1);
+      color: var(--color-accent-light);
+      font-weight: 600;
+    }
+    tr:hover td {
+      background: rgba(255, 255, 255, 0.02);
+    }
+    .link-cell {
+      max-width: 280px;
+      word-break: break-all;
+      color: var(--color-accent-light);
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+    }
+    .qr-thumb-wrap {
+      width: 64px;
+      height: 64px;
+      background: #fff;
+      padding: 4px;
+      border-radius: var(--radius-sm);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+    .qr-thumb-wrap svg {
+      width: 100%;
+      height: 100%;
+    }
+    .action-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: var(--space-md);
+      flex-wrap: wrap;
+      gap: var(--space-sm);
+    }
+    /* Modal for enlarged QR */
+    .qr-modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.85);
+      z-index: 10005;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: var(--space-md);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity var(--duration-fast) var(--easing);
+    }
+    .qr-modal.show {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .qr-modal-content {
+      background: #0f172a;
+      border: 1px solid var(--color-accent);
+      border-radius: var(--radius-lg);
+      padding: var(--space-lg);
+      text-align: center;
+      max-width: 360px;
+      width: 100%;
+    }
+    .qr-modal-image-box {
+      background: #fff;
+      padding: 16px;
+      border-radius: var(--radius-md);
+      margin: var(--space-md) auto;
+      display: inline-block;
+    }
+    .qr-modal-image-box svg {
+      width: 220px;
+      height: 220px;
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <div class="container" style="padding-bottom: var(--space-xl);">
+    <header class="tool-header">
+      <div class="hero-monogram-placeholder" style="width: 56px; height: 56px; font-size: 1.3rem; margin: 0 auto var(--space-sm); border: 2px solid var(--color-accent);" aria-label="PTB Monogram">PTB</div>
+      <h1 class="tool-title">Công Cụ Tạo Link Mời Khách Hàng Loạt</h1>
+      <p class="tool-desc">
+        Nhập danh sách tên khách mời (mỗi người 1 dòng), công cụ sẽ tự động tạo đường link cá nhân hóa và mã QR tương ứng để gửi cho bạn bè, người thân hoặc thầy cô.
+      </p>
+    </header>
+
+    <div class="card generator-card">
+      <div class="options-row">
+        <div class="form-group" style="margin-bottom: 0;">
+          <label for="base-url-input" class="form-label">Tên miền trang web:</label>
+          <input type="text" id="base-url-input" class="form-input" value="https://binh-tn2026.pages.dev/" />
+        </div>
+        <div class="form-group" style="margin-bottom: 0;">
+          <label for="lang-select" class="form-label">Ngôn ngữ mặc định:</label>
+          <select id="lang-select" class="form-input">
+            <option value="vi">Tiếng Việt (mặc định)</option>
+            <option value="en">English (?lang=en)</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="names-input" class="form-label">Danh sách khách mời (mỗi tên một dòng):</label>
+        <textarea id="names-input" class="form-textarea" style="height: 140px;" placeholder="Ví dụ:&#10;Thầy Nam&#10;Cô Hương&#10;Bạn Minh&#10;Gia đình anh Tuấn&#10;Em Linh"></textarea>
+      </div>
+
+      <div style="display: flex; gap: var(--space-sm); flex-wrap: wrap;">
+        <button id="btn-generate" type="button" class="btn btn-primary">
+          <span>✨</span>
+          <span>Tạo Danh Sách Link</span>
+        </button>
+        <button id="btn-sample" type="button" class="btn btn-secondary">
+          <span>📝</span>
+          <span>Điền Mẫu Thử</span>
+        </button>
+        <button id="btn-clear" type="button" class="btn btn-secondary">
+          <span>🗑️</span>
+          <span>Xóa Dữ Liệu</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Output Section -->
+    <div id="results-wrapper" style="display: none;">
+      <div class="action-bar">
+        <h2 style="font-size: var(--text-lg); color: var(--color-accent-light);" id="count-summary">Danh Sách Đã Tạo (0)</h2>
+        <button id="btn-copy-all" type="button" class="btn btn-secondary">
+          <span>📋</span>
+          <span>Sao Chép Toàn Bộ (Tên + Link)</span>
+        </button>
+      </div>
+
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th style="width: 50px;">STT</th>
+              <th>Khách Mời</th>
+              <th>Đường Link Cá Nhân Hóa</th>
+              <th style="width: 100px;">Thao Tác</th>
+              <th style="width: 90px; text-align: center;">Mã QR</th>
+            </tr>
+          </thead>
+          <tbody id="links-tbody">
+            <!-- Rendered by JS -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- QR Enlarged Modal -->
+  <div id="qr-modal" class="qr-modal" role="dialog" aria-modal="true" aria-labelledby="modal-guest-name">
+    <div class="qr-modal-content">
+      <h3 id="modal-guest-name" style="font-family: var(--font-heading); color: var(--color-accent-light); font-size: var(--text-xl);">Tên Khách Mời</h3>
+      <div id="modal-qr-box" class="qr-modal-image-box"></div>
+      <p id="modal-guest-link" class="link-cell" style="margin-bottom: var(--space-md);"></p>
+      <div style="display: flex; gap: 8px; justify-content: center;">
+        <button id="btn-modal-copy" type="button" class="btn btn-primary">Sao Chép Link</button>
+        <button id="btn-modal-close" type="button" class="btn btn-secondary">Đóng</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div id="toast" class="toast-notification" role="status" aria-live="polite"></div>
+
+  <!-- Local QR generator library -->
+  <script src="../vendor/qrcode.min.js"></script>
+
+  <script>
+    const baseUrlInput = document.getElementById('base-url-input');
+    const langSelect = document.getElementById('lang-select');
+    const namesInput = document.getElementById('names-input');
+    const btnGenerate = document.getElementById('btn-generate');
+    const btnSample = document.getElementById('btn-sample');
+    const btnClear = document.getElementById('btn-clear');
+    const resultsWrapper = document.getElementById('results-wrapper');
+    const linksTbody = document.getElementById('links-tbody');
+    const countSummary = document.getElementById('count-summary');
+    const btnCopyAll = document.getElementById('btn-copy-all');
+    const toast = document.getElementById('toast');
+
+    // Modal elements
+    const qrModal = document.getElementById('qr-modal');
+    const modalGuestName = document.getElementById('modal-guest-name');
+    const modalQrBox = document.getElementById('modal-qr-box');
+    const modalGuestLink = document.getElementById('modal-guest-link');
+    const btnModalCopy = document.getElementById('btn-modal-copy');
+    const btnModalClose = document.getElementById('btn-modal-close');
+
+    let currentGeneratedLinks = [];
+    let currentModalLink = '';
+
+    function showToast(msg) {
+      toast.textContent = msg;
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 2800);
+    }
+
+    function createQrSvg(url, size) {
+      try {
+        if (typeof window.qrcode === 'function') {
+          const qr = window.qrcode(0, 'M');
+          qr.addData(url);
+          qr.make();
+          return qr.createSvgTag({ cellSize: size, margin: 1, scalable: true });
+        }
+      } catch (e) {
+        console.warn(e);
+      }
+      return '<span>QR Error</span>';
+    }
+
+    function generateLinks() {
+      const rawText = namesInput.value.trim();
+      if (!rawText) {
+        showToast('Vui lòng nhập ít nhất một tên khách mời!');
+        return;
+      }
+
+      let baseUrl = baseUrlInput.value.trim();
+      if (!baseUrl.endsWith('/')) baseUrl += '/';
+
+      const lang = langSelect.value;
+      const lines = rawText.split('\n').map(l => l.trim()).filter(l => l.length > 0);
+
+      currentGeneratedLinks = [];
+      linksTbody.innerHTML = '';
+
+      lines.forEach((name, idx) => {
+        // Create clean hyphenated or URL encoded format
+        const cleanSlug = name.replace(/\s+/g, '-');
+        const urlObj = new URL(baseUrl);
+        urlObj.searchParams.set('khach', cleanSlug);
+        if (lang === 'en') {
+          urlObj.searchParams.set('lang', 'en');
+        }
+
+        const fullUrl = urlObj.toString();
+        currentGeneratedLinks.push({ name, url: fullUrl });
+
+        const tr = document.createElement('tr');
+
+        // STT
+        const tdIdx = document.createElement('td');
+        tdIdx.textContent = String(idx + 1);
+
+        // Name
+        const tdName = document.createElement('td');
+        tdName.style.fontWeight = '600';
+        tdName.textContent = name;
+
+        // Link
+        const tdLink = document.createElement('td');
+        tdLink.className = 'link-cell';
+        tdLink.textContent = fullUrl;
+
+        // Action: Copy
+        const tdAction = document.createElement('td');
+        const copyBtn = document.createElement('button');
+        copyBtn.className = 'btn btn-secondary';
+        copyBtn.style.padding = '4px 10px';
+        copyBtn.style.fontSize = '0.75rem';
+        copyBtn.textContent = 'Copy';
+        copyBtn.addEventListener('click', () => {
+          navigator.clipboard.writeText(fullUrl).then(() => {
+            showToast(`Đã sao chép link của ${name}!`);
+          });
+        });
+        tdAction.appendChild(copyBtn);
+
+        // QR Code thumbnail
+        const tdQr = document.createElement('td');
+        tdQr.style.textAlign = 'center';
+        const qrWrap = document.createElement('div');
+        qrWrap.className = 'qr-thumb-wrap';
+        qrWrap.title = 'Nhấn để phóng to mã QR';
+        qrWrap.innerHTML = createQrSvg(fullUrl, 2);
+        qrWrap.addEventListener('click', () => {
+          openQrModal(name, fullUrl);
+        });
+        tdQr.appendChild(qrWrap);
+
+        tr.appendChild(tdIdx);
+        tr.appendChild(tdName);
+        tr.appendChild(tdLink);
+        tr.appendChild(tdAction);
+        tr.appendChild(tdQr);
+
+        linksTbody.appendChild(tr);
+      });
+
+      countSummary.textContent = `Danh Sách Đã Tạo (${lines.length})`;
+      resultsWrapper.style.display = 'block';
+      showToast(`Đã tạo thành công ${lines.length} đường link!`);
+    }
+
+    function openQrModal(name, url) {
+      currentModalLink = url;
+      modalGuestName.textContent = name;
+      modalGuestLink.textContent = url;
+      modalQrBox.innerHTML = createQrSvg(url, 5);
+      qrModal.classList.add('show');
+    }
+
+    function closeQrModal() {
+      qrModal.classList.remove('show');
+    }
+
+    btnModalClose.addEventListener('click', closeQrModal);
+    qrModal.addEventListener('click', (e) => {
+      if (e.target === qrModal) closeQrModal();
+    });
+
+    btnModalCopy.addEventListener('click', () => {
+      if (currentModalLink) {
+        navigator.clipboard.writeText(currentModalLink).then(() => {
+          showToast('Đã sao chép link!');
+        });
+      }
+    });
+
+    btnGenerate.addEventListener('click', generateLinks);
+
+    btnSample.addEventListener('click', () => {
+      namesInput.value = [
+        'Thầy Nam',
+        'Cô Lan',
+        'Bạn Minh',
+        'Gia đình anh Tuấn',
+        'Em Linh',
+        'Nhóm bạn cấp 3'
+      ].join('\n');
+      generateLinks();
+    });
+
+    btnClear.addEventListener('click', () => {
+      namesInput.value = '';
+      linksTbody.innerHTML = '';
+      resultsWrapper.style.display = 'none';
+      currentGeneratedLinks = [];
+    });
+
+    btnCopyAll.addEventListener('click', () => {
+      if (currentGeneratedLinks.length === 0) return;
+      const textBlock = currentGeneratedLinks.map(item => `${item.name}: ${item.url}`).join('\n');
+      navigator.clipboard.writeText(textBlock).then(() => {
+        showToast(`Đã sao chép toàn bộ ${currentGeneratedLinks.length} đường link vào clipboard!`);
+      });
+    });
+  </script>
+</body>
+</html>
