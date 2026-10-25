@@ -45,13 +45,16 @@
   <a href="#main-content" class="skip-link" data-i18n="nav.skipToContent">Chuyển đến nội dung chính</a>
 
   <!-- Envelope Opening Screen (#envelope-screen) -->
-  <div id="envelope-screen" class="envelope-screen" role="dialog" aria-modal="true" aria-labelledby="envelope-title">
+  <div id="envelope-screen" class="envelope-screen" role="dialog" aria-modal="true" aria-labelledby="envelope-guest-name">
     <div class="envelope-wrapper">
       <div class="envelope-card">
         <div class="envelope-seal" aria-hidden="true" data-i18n="envelope.monogram">PTB</div>
-        <h2 id="envelope-title" class="envelope-title" data-i18n="envelope.title">LỄ TỐT NGHIỆP</h2>
-        <div class="envelope-name" data-i18n="envelope.subtitle">Phan Thanh Bình</div>
+        <div class="envelope-badge" data-i18n="envelope.badge">LỄ TỐT NGHIỆP 2026</div>
         <p class="envelope-prompt" data-i18n="envelope.prompt">Trân trọng kính mời</p>
+        <h2 id="envelope-guest-name" class="envelope-guest-name" data-i18n="envelope.guestDefault">Bạn và người thân</h2>
+        <p class="envelope-subprompt" data-i18n="envelope.subprompt">đến chung vui Lễ Tốt Nghiệp của</p>
+        <div class="envelope-owner-name" data-i18n="envelope.owner">Phan Thanh Bình</div>
+        <div class="envelope-owner-degree" data-i18n="envelope.degree">Kỹ sư An toàn thông tin • Đại học Cần Thơ</div>
         <button id="btn-open-envelope" class="btn-open-envelope" type="button" aria-label="Mở phong bì thiệp mời">
           <span data-i18n="envelope.openBtn">Mở thiệp</span>
           <span aria-hidden="true">✉</span>
@@ -98,21 +101,36 @@
 
         <div class="hero-badge fade-up" data-i18n="hero.badge">LỄ TỐT NGHIỆP 2026</div>
 
-        <!-- Personalized Greeting -->
+        <!-- Personalized Guest Greeting (Prominent & Respectful) -->
         <div class="hero-greeting-box fade-up">
-          <p id="hero-greeting-text" class="hero-greeting" data-i18n="hero.greetingDefault">Kính mời bạn,</p>
+          <span class="hero-greeting-prefix" data-i18n="hero.greetingPrefix">Trân trọng kính mời</span>
+          <h2 id="hero-greeting-text" class="hero-guest-title" data-i18n="hero.guestDefault">Bạn và người thân</h2>
+          <p class="hero-invite-lead" data-i18n="hero.inviteLead">đến chung vui trong ngày lễ tốt nghiệp của</p>
         </div>
 
-        <h1 class="hero-title fade-up" data-i18n="hero.name">Phan Thanh Bình</h1>
-        <div class="hero-degree fade-up" data-i18n="hero.degree">Kỹ sư An toàn thông tin</div>
-        <div class="hero-school fade-up" data-i18n="hero.school">Trường Công nghệ Thông tin & Truyền thông</div>
-        <div class="hero-university fade-up" data-i18n="hero.university">Đại học Cần Thơ</div>
+        <!-- Graduate Centerpiece Profile -->
+        <div class="hero-graduate-card fade-up">
+          <h1 class="hero-title" data-i18n="hero.name">Phan Thanh Bình</h1>
+          <div class="hero-degree" data-i18n="hero.degree">Kỹ sư An toàn thông tin</div>
+          <div class="hero-school" data-i18n="hero.school">Trường Công nghệ Thông tin & Truyền thông</div>
+          <div class="hero-university" data-i18n="hero.university">Đại học Cần Thơ</div>
+        </div>
 
-        <!-- Date & Location Capsule -->
+        <!-- Date & Location Capsule with Highlighted Meetup Time -->
         <div class="hero-details-pill fade-up">
-          <span>📅 <strong data-i18n="hero.dateLabel">Thứ Bảy, 31 Tháng 10, 2026</strong></span>
-          <span>⏰ <span data-i18n="hero.timeLabel">13:30 - 17:30</span></span>
-          <span>📍 <span data-i18n="hero.venueSummary">Hội trường Rùa • Đại học Cần Thơ</span></span>
+          <span class="pill-item">📅 <strong data-i18n="hero.dateLabel">Thứ Bảy, 31 Tháng 10, 2026</strong></span>
+          <span class="pill-item">⏰ <span data-i18n="hero.timeLabel">13:30 - 17:30</span> <small class="pill-subtext" data-i18n="hero.ceremonyNote">(Lễ chính thức)</small></span>
+          <span class="pill-item pill-highlight">📸 <strong data-i18n="hero.photoTimeLabel">Đón khách & Chụp ảnh: từ 16:00</strong></span>
+          <span class="pill-item">📍 <span data-i18n="hero.venueSummary">Hội trường Rùa • Đại học Cần Thơ</span></span>
+        </div>
+
+        <!-- Golden Hour Meetup Callout (16:00 Advice) -->
+        <div class="hero-timing-tip fade-up">
+          <div class="timing-tip-icon" aria-hidden="true">💡</div>
+          <div class="timing-tip-body">
+            <strong class="timing-tip-heading" data-i18n="hero.timingTipHighlight">Thời điểm gặp nhau lý tưởng:</strong>
+            <p class="timing-tip-text" data-i18n="hero.timingTip">Lễ trao bằng chính thức diễn ra từ 13:30 trong hội trường. Bạn đến vào lúc 16:00 là thời điểm đẹp nhất để gặp gỡ và chụp ảnh kỷ niệm cùng Bình nhé!</p>
+          </div>
         </div>
 
         <!-- Invitation Quote -->

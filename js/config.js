@@ -10,8 +10,8 @@ export const config = {
   eventEnd: "2026-10-31T17:30:00+07:00",
   rsvpDeadline: "2026-10-31T12:00:00+07:00",
   timeline: [
-    { time: "13:30", vi: "Lễ tốt nghiệp", en: "Graduation ceremony" },
-    { time: "16:00", vi: "Chụp ảnh cùng bạn bè, người thân", en: "Photos with friends & family" }
+    { time: "13:30", vi: "Lễ trao bằng chính thức (diễn ra bên trong Hội trường Rùa)", en: "Official graduation ceremony (inside Turtle Hall)" },
+    { time: "16:00", vi: "⭐ Khung giờ vàng: Gặp gỡ & Chụp ảnh kỷ niệm cùng bạn bè, người thân", en: "⭐ Golden hour: Meetup & commemorative photos with friends & family" }
   ],
   venue: {
     name: { vi: "Hội trường Rùa, Đại học Cần Thơ", en: "Turtle Hall, Can Tho University" },

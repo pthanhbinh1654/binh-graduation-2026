@@ -65,14 +65,15 @@ function applyI18n() {
     }
   });
 
-  // Update personalized greeting
+  // Update personalized greeting on envelope and hero
+  const envelopeGuestEl = document.getElementById('envelope-guest-name');
+  if (envelopeGuestEl) {
+    envelopeGuestEl.textContent = guestName ? guestName : t.envelope.guestDefault;
+  }
+
   const greetingEl = document.getElementById('hero-greeting-text');
   if (greetingEl) {
-    if (guestName) {
-      greetingEl.textContent = `${t.hero.greetingPrefix} ${guestName},`;
-    } else {
-      greetingEl.textContent = `${t.hero.greetingDefault},`;
-    }
+    greetingEl.textContent = guestName ? guestName : t.hero.guestDefault;
   }
 
   // Update dynamic timeline items
@@ -106,7 +107,7 @@ function renderTimeline() {
     dot.className = 'timeline-dot';
 
     const card = document.createElement('div');
-    card.className = 'timeline-card';
+    card.className = item.time === '16:00' ? 'timeline-card timeline-card-highlight' : 'timeline-card';
 
     const time = document.createElement('span');
     time.className = 'timeline-time';
