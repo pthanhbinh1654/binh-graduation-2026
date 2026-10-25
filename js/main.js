@@ -146,7 +146,8 @@ function setupEnvelope() {
 
   if (!screen || !openBtn) return;
 
-  const isOpened = sessionStorage.getItem('envelope_opened') === 'true';
+  const params = new URLSearchParams(window.location.search);
+  const isOpened = sessionStorage.getItem('envelope_opened') === 'true' || params.get('opened') === '1';
   if (isOpened) {
     screen.style.display = 'none';
     screen.classList.add('opened');

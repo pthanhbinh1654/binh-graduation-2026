@@ -98,12 +98,12 @@ export function initWeather(lat, lng, targetDateIso, getLang = () => 'vi') {
     const rainFill = document.createElement('div');
     rainFill.className = 'weather-rain-fill';
     rainFill.style.width = `${weatherData.rainProb}%`;
-    // Color: green < 30%, yellow 30-60%, red > 60%
+    // Color: academic forest green < 30%, champagne gold 30-60%, vermillion > 60%
     rainFill.style.background = weatherData.rainProb < 30
-      ? '#4ade80'
+      ? 'var(--color-success)'
       : weatherData.rainProb < 60
-        ? '#facc15'
-        : '#f87171';
+        ? 'var(--color-accent)'
+        : 'var(--color-error)';
     rainBar.appendChild(rainFill);
     statsDiv.appendChild(rainBar);
 
