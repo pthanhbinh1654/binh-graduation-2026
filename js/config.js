@@ -31,5 +31,5 @@ export const config = {
     showPortrait: false,
     showParking: false
   },
-  appsScriptUrl: "" // Fill in after deploying Google Apps Script
+  appsScriptUrl: "https://script.google.com/macros/s/AKfycbyywVGqKmpDJmhCvNMRqiITgMatleaYi34fS9CuZHyQdC9PBkAIl_ms2_JQB5QcF68d/exec"
 };
